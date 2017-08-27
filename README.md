@@ -2,7 +2,7 @@
 
 A template for a Heroku app with a Python Flask backend and a JavaScript frontend.
 
-To use this to create a Heroku app, you will need to have Heroku installed ([instructions here](https://devcenter.heroku.com/articles/heroku-cli)).
+To use this to create a Heroku app, you will need to have Heroku installed ([instructions here](https://devcenter.heroku.com/articles/heroku-cli)). Then:
 
 1. Clone this repo into a directory.
 

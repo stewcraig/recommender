@@ -7,7 +7,7 @@ app = Flask(__name__)
 def static_page():
     return render_template('index.html')
 
-@app.route('/search')
+@app.route('/search/', methods=['GET'])
 def test_reply():
 	value = str(request.args.get('value', "DEFAULT VALUE"))
 	return_value = value.upper()

@@ -2,13 +2,24 @@
 <HTML>
 <HEAD>
 <SCRIPT src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></SCRIPT>
+<meta http-equiv="content-type" name="viewport" content="width=device-width, initial-scale=1.0">
 <SCRIPT type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  $(document).ready(function(){
+    $("#searchForm").submit(function(){
+      $.ajax({
+        type: "GET",
+        url: $SCRIPT_ROOT + "/search/",
+        contentType:"application/json; charset=utf-8",
+        data: {value: $('input[name=value]').val()},
+        success: function(data){$("#outputDiv").text(data.result)}
+      });
+      return false;
+    });
+  });
 </SCRIPT>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <STYLE>
-
-
 .center{
 	margin:auto;
 }
@@ -24,9 +35,10 @@
 
 #outputDiv{
 	width: 300px;
-	height: 200px;
+	height: 150px;
   border: .5px solid;
 	margin-top: 20px;
+  padding-top:40px;
 	text-align: center;
 }
 
@@ -37,8 +49,8 @@
 </HEAD>
 <BODY>
 	<DIV id="formsDiv" class="center">
-		<FORM>
-			<INPUT type="text" name="search" placeholder="Enter text..." id="textForm">
+		<FORM id="searchForm">
+			<INPUT type="text" name="value" placeholder="Enter text..." id="textForm">
 			<INPUT type="submit" value="Submit">
 		</FORM>
 	</DIV>

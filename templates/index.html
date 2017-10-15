@@ -1,12 +1,43 @@
 <!DOCTYPE html>
-<HTML>
+<HTML lang="en">
 <HEAD>
 <SCRIPT src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></SCRIPT>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
 <meta http-equiv="content-type" name="viewport" content="width=device-width, initial-scale=1.0">
+<TITLE>Recommender</TITLE>
+
 <SCRIPT type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
   $(document).ready(function(){
-    $("#searchForm").submit(function(){
+
+    //Temporary tags for testing autocomplete
+    var tags = ["ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+
+    $( "#searchForm" ).submit(function(){
       $.ajax({
         type: "GET",
         url: $SCRIPT_ROOT + "/search/",
@@ -16,6 +47,11 @@
       });
       return false;
     });
+
+    $( "#textForm" ).autocomplete({
+      source: tags
+    });
+
   });
 </SCRIPT>
 
@@ -42,13 +78,11 @@
 	text-align: center;
 }
 
-
-
 </STYLE>
 
 </HEAD>
 <BODY>
-	<DIV id="formsDiv" class="center">
+	<DIV id="formsDiv" class="center ui-widget">
 		<FORM id="searchForm">
 			<INPUT type="text" name="value" placeholder="Enter text..." id="textForm">
 			<INPUT type="submit" value="Submit">

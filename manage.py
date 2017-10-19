@@ -14,30 +14,10 @@ conn = psycopg2.connect(database=url.path[1:], user=url.username, password=url.p
 cur = conn.cursor()
 
 # Form a dataframe of movie information.
-movies_df = pd.DataFrame(columns=["movieid", "movierow", "title", "year", "genre"])
-cur.execute("""SELECT movieid, movierow, title, year, genre from movies""")
-movie_rows = cur.fetchall()
-for row in movie_rows:
-    movies_df = movies_df.append(row[0:5])
-# Make sure it is in order.
-movies_df = movies_df.sort_values("movieid")
-
-# Form a dataframe of factorised movie coordinates for recommender.
-# Get movieid as well so we can make sure it is in same order as movies_df.
-factorised_movies = pd.DataFrame(columns=["movieid", "latent1", "latent2", "latent3", "latent4", "latent5"])
-cur.execute("""SELECT movieid, latent1, latent2, latent3, latent4, latent5 from movies""")
-movie_rows = cur.fetchall()
-for row in movie_rows:
-    factorised_movies = factorised_movies.append(row[0:6])
-# Make sure it is in order, then drop movieid.
-factorised_movies = factorised_movies.sort_values("movieid").drop("movieid", axis=1)
-
-# Form a dataframe of the factorisation diagonal for the recommender.
-factorised_diag = pd.DataFrame(columns=["diag"])
-cur.execute("""SELECT diag from diag""")
-diag_rows = cur.fetchall()
-for row in diag_rows:
-    factorised_diag = factorised_diag.append(row[0])
+movies_all_df = pd.read_sql("""SELECT * from movies""", conn)
+movies_df = movies_all_df.loc[:, ["movieid", "movierow", "title", "year"]]
+factorised_movies = movies_all_df.loc[:, ["latent1", "latent2", "latent3", "latent4", "latent5"]]
+factorised_diag = pd.read_sql("""SELECT * from diag""", conn)
 
 # Set up recommender.
 m = MovieLensRecommender(factorised_movies=factorised_movies.as_matrix(),

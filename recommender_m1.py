@@ -4,7 +4,7 @@ import pandas as pd
 
 class MovieLensRecommender:
 
-    def __init__(self, factorised_movies, factorised_users, factorised_diag, movie_df):
+    def __init__(self, factorised_movies, factorised_diag, movie_df):
         """
             Args:
                 factorised_movies: u x r matrix.
@@ -12,9 +12,9 @@ class MovieLensRecommender:
                 movie_df: pandas DataFrame with u rows. Must have these columns: movierow, title, year. 
                           May have other columns too. 
         """
-        self.movie_df = movie_df
-        self.recommender = Recommender(U = factorised_movies,
-                                    S = factorised_diag)
+        self.movie_df = movie_df.copy()
+        self.recommender = Recommender(U = factorised_movies.copy(),
+                                    S = factorised_diag.copy())
 
     def ratings_dict_to_column(self, x):
         """Convert movie titles and ratings to column vector that can be passed to the recommender.
@@ -44,6 +44,5 @@ class MovieLensRecommender:
         predictions = self.recommender.predict_for_new_v(new_user_ratings_column)
         # predictions is a vector corresponding to MovieRow.
         # Convert to title.
-        #TODO Make sure this returns a copy.
-        return self.movie_df.assign(prediction=predictions)
+        return self.movie_df.copy().assign(prediction=predictions)
 		

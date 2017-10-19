@@ -8,8 +8,8 @@ class Recommender:
                 U: Matrix.
                 S: Vector.
         """
-        self.U = np.matrix(U)
-        self.diag_S = np.diag(S)
+        self.U = np.matrix(U.copy())
+        self.diag_S = np.diag(S.copy())
 
     def predict_for_new_v(self, new_v):
         """Using method from Brand 'Fast online SVD revisions for lightweight recommender systems',

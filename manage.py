@@ -44,7 +44,6 @@ def test_reply():
         return_value = value.upper()
         predictions_string = predictions_df.sort_values('prediction', ascending=False).head()
         return jsonify(result = "JS said: " + value + " and Flask replied: " + return_value +
-                "\nFirst row of movies table: " + str(movie_rows[0]) +
                 ".\n New ratings: " + str(new_user_ratings) +
                 ".\n Predictions: " + str(predictions_string))
     except Error as e:

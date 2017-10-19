@@ -20,6 +20,7 @@ factorised_movies = movies_all_df.loc[:, ["latent1", "latent2", "latent3", "late
 factorised_diag = pd.read_sql("""SELECT * from diag""", conn)
 
 # Set up recommender.
+print(factorised_diag.as_matrix())
 m = MovieLensRecommender(factorised_movies=factorised_movies.as_matrix(),
                          factorised_diag=factorised_diag.as_matrix().tranpose(),
                          movie_df=movies_df)

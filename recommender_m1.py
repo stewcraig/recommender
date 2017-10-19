@@ -9,8 +9,8 @@ class MovieLensRecommender:
             Args:
                 factorised_movies: u x r matrix.
                 factorised_diag: r x 1 matrix.
-                movie_df: pandas DataFrame with u rows. Must have these columns: movierow, title, year. 
-                          May have other columns too. 
+                movie_df: pandas DataFrame with u rows. Must have these columns: movierow, title, year.
+                          May have other columns too.
         """
         self.movie_df = movie_df.copy()
         self.recommender = Recommender(U = factorised_movies.copy(),
@@ -24,7 +24,7 @@ class MovieLensRecommender:
         """
         # Convert dict to data frame.
         x_df = pd.DataFrame.from_dict(x, orient='index')
-        x_df = x_df.assign(Title=x_df.index, rating=x_df[0])
+        x_df = x_df.assign(title=x_df.index, rating=x_df[0])
         # Merge to get MovieRows.
         x_df = x_df.merge(self.movie_df, on='title')
         # Create column vector, with entries corresponding to MovieRows as appropriate ratings
@@ -45,4 +45,3 @@ class MovieLensRecommender:
         # predictions is a vector corresponding to MovieRow.
         # Convert to title.
         return self.movie_df.copy().assign(prediction=predictions)
-		

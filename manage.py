@@ -21,7 +21,7 @@ factorised_diag = pd.read_sql("""SELECT * from diag""", conn)
 
 # Set up recommender.
 m = MovieLensRecommender(factorised_movies=factorised_movies.as_matrix(),
-                         factorised_diag=factorised_diag.as_matrix(),
+                         factorised_diag=factorised_diag.as_matrix().tranpose(),
                          movie_df=movies_df)
 
 # Make some recommendations for a fixed new user.

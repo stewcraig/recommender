@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <HTML lang="en">
 <HEAD>
-<SCRIPT src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></SCRIPT>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
 <meta http-equiv="content-type" name="viewport" content="width=device-width, initial-scale=1.0">
-<TITLE>Recommender</TITLE>
+<TITLE>Recommender a classic</TITLE>
 
 <SCRIPT type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
@@ -38,20 +39,30 @@
     ];
 
     $( "#searchForm" ).submit(function(){
+      // Use loop to conver inputs from entry boxes into a single line
+      let searchValue = ""
+      for (let i = 1; i < 4; i++){
+        var movieName = $("#movie" + i).val();
+        if (movieName) {searchValue += movieName + "+" + $("#rating" + i + " option:selected").val() + "+"};
+      }
+
+      // Ajax request
       $.ajax({
         type: "GET",
         url: $SCRIPT_ROOT + "/search/",
         contentType:"application/json; charset=utf-8",
-        data: {value: $('input[name=value]').val()},
-        success: function(data){$("#outputDiv").text(data.result)}
+        data: { value: searchValue},
+        success: function(data){ 
+          $("#outputDiv").text(data.result);
+          console.log(data.result)
+          }
       });
       return false;
     });
 
-    $( "#textForm" ).autocomplete({
+    $( ".movie-form" ).autocomplete({
       source: tags
     });
-
   });
 </SCRIPT>
 
@@ -60,36 +71,115 @@
 	margin:auto;
 }
 
-#formsDiv{
-	width: 320px;
-	margin-top:220px;
+.absolute-wrapper{
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%);
+  text-align: center;
+  font-size: 12px;
+  width:100%;
+  padding: 20px;
+  color: rgba(0, 0, 0, .8)
 }
 
-#textForm{
-	width: 250px;
+.container-fluid{
+  max-width: 500px;
+}
+
+.block{
+  display: inline-block;
+}
+
+p{
+  text-align: left;
+  font-weight: 700;
+}
+
+input, select{
+  margin-bottom: 10px;
+}
+
+h1{
+  letter-spacing: 0px;
+  font-weight: 700;
+  /* font-size: 8vw; */
+}
+
+@media (max-width: 576px){
+  h1{
+    font-size: 30px;/
+    margin-bottom: 30px;
+  }
+}
+
+@media (min-width: 577px){
+  h1{
+    font-size: 50px;
+    margin-bottom: 30px;
+  }
 }
 
 #outputDiv{
-	width: 300px;
-	height: 150px;
-  border: .5px solid;
-	margin-top: 20px;
-  padding-top:40px;
+	max-width: 500px;
+	min-height: 150px;
+  margin-top:30px;
+  border: .5px solid rgba(0,0,0, .2);
 	text-align: center;
+}
+
+.ui-widget{
+  font-size:13px;
 }
 
 </STYLE>
 
 </HEAD>
 <BODY>
-	<DIV id="formsDiv" class="center ui-widget">
-		<FORM id="searchForm">
-			<INPUT type="text" name="value" placeholder="Enter text..." id="textForm">
-			<INPUT type="submit" value="Submit">
-		</FORM>
-	</DIV>
-	<DIV id="outputDiv" class="center">
-		<p>Output</p>
-	</DIV>
+  <DIV class="absolute-wrapper">
+    <H1> Recommend a classic </H1>
+      <DIV class="container-fluid">
+        <FORM id="searchForm" class="ui-widget">
+          <DIV class="row">
+            <P class="col-9 mr-auto"> Movie title</P>
+            <P class="col-2"> Rating</P>
+          </DIV>
+          <DIV class="row">
+            <INPUT type="text" name="value" id="movie1" class="movie-form col-9 mr-auto form-control">
+            <SELECT class="form-control col-2"  name="rating" id="rating1">
+                <OPTION>1</OPTION>
+                <OPTION>2</OPTION>
+                <OPTION>3</OPTION>
+                <OPTION>4</OPTION>
+                <OPTION>5</OPTION>
+              </SELECT>
+          </DIV>
+          <DIV class="row">
+            <INPUT type="text" name="value"  id="movie2" class="movie-form col-9 mr-auto form-control">
+            <SELECT class="form-control col-2" name="rating" id="rating2">
+              <OPTION>1</OPTION>
+              <OPTION>2</OPTION>
+              <OPTION>3</OPTION>
+              <OPTION>4</OPTION>
+              <OPTION>5</OPTION>
+            </SELECT>
+          </DIV>
+          <DIV class="row">
+            <INPUT type="text" name="value"  id="movie3" class="movie-form col-9 mr-auto form-control">
+            <SELECT class="form-control col-2" name="rating" id="rating3">
+                <OPTION>1</OPTION>
+                <OPTION>2</OPTION>
+                <OPTION>3</OPTION>
+                <OPTION>4</OPTION>
+                <OPTION>5</OPTION>
+              </SELECT>
+           </DIV>
+          <INPUT type="submit" value="Submit"class="btn btn-primary center">
+        </FORM>
+      </DIV>
+      <DIV id="outputDiv" class="center">
+        <p>Output</p>
+      </DIV>
+  </DIV>
 </BODY>
 </HTML>

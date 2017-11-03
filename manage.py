@@ -2,6 +2,7 @@
 
 import os
 from urllib import parse
+import toolz
 from flask import Flask, render_template, jsonify, request
 import psycopg2
 import pandas as pd
@@ -26,14 +27,11 @@ try:
   m = MovieLensRecommender(factorised_movies=factorised_movies.as_matrix(),
                            factorised_diag=diag, # Should be: diag_df.as_matrix().transpose()
                            movie_df=movies_df)
-
-  # Make some recommendations for a fixed new user.
-  new_user_ratings = {'Die Hard':5, 'Terminator':5, 'Speed':5}
-  predictions_df = m.get_predictions(new_user_ratings)
-  predictions_string = predictions_df.sort_values('prediction', ascending=False).head()
+  # Set recommender function.
+  make_predictions = lambda new_user_ratings: m.get_predictions(new_user_ratings).sort_values('prediction', ascending=False).head()
 except KeyError:
-  new_user_ratings = {'Die Hard':5, 'Terminator':5, 'Speed':5}
-  predictions_string = "Running locally. Could not access database."
+  # Probably couldn't access the database. Create a 'recommender' that always reports failure.
+  make_predictions = lambda x: "Could not access database."
   
 # Set up app.
 app = Flask(__name__)
@@ -45,11 +43,13 @@ def static_page():
 @app.route('/search/', methods=['GET'])
 def test_reply():
     try:
-        value = request.args.get('value', "DEFAULT VALUE", type=str)
-        return_value = value.upper()
-        return jsonify(result = "JS said: " + value + " and Flask replied: " + return_value +
-                ".\n New ratings: " + str(new_user_ratings) +
-                ".\n Predictions: " + str(predictions_string))
+        movie_rating_string = request.args.get('value', "DEFAULT VALUE", type=str)
+        # movie_rating_string is of form "movie1+rating1+movie2+rating2+".
+        # Convert to dict.
+        parsed_movie_ratings = dict(toolz.itertoolz.partition(2, movie_rating_string.split("+")))
+        predictions_string = str(make_predictions(parsed_movie_ratings)) 
+        return jsonify("Your ratings: " + str(parsed_movie_ratings) + "\n" +
+                "Predictions: " + predictions_string)
     except Error as e:
         print(e)
 

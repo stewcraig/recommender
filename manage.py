@@ -48,8 +48,9 @@ def test_reply():
         # Convert to dict.
         parsed_movie_ratings = dict(toolz.itertoolz.partition(2, movie_rating_string.split("+")))
         predictions_string = str(make_predictions(parsed_movie_ratings)) 
-        return jsonify("Your ratings: " + str(parsed_movie_ratings) + "\n" +
-                "Predictions: " + predictions_string)
+        return jsonify("String received: " + movie_rating_string + "\n" + 
+			"Your ratings: " + str(parsed_movie_ratings) + "\n" +
+                	"Predictions: " + predictions_string)
     except Error as e:
         print(e)
 

@@ -47,11 +47,14 @@ def test_reply():
         print("Got: " + movie_rating_string)
         # movie_rating_string is of form "movie1+rating1+movie2+rating2+".
         # Convert to dict.
-        #parsed_movie_ratings = dict(toolz.itertoolz.partition(2, movie_rating_string.split("+")))
-        #predictions_string = str(make_predictions(parsed_movie_ratings)) 
-        return jsonify("String received: " + movie_rating_string + "\n" + "")
-			#"Your ratings: " + str(parsed_movie_ratings) + "\n" +
-                	#"Predictions: " + predictions_string)
+        parsed_movie_ratings = dict(toolz.itertoolz.partition(2, movie_rating_string.split("+")))
+        print("Parsed: " + str(parsed_movie_ratings))
+        predictions_string = str(make_predictions(parsed_movie_ratings)) 
+        print("Predictions: " + str(predictions_string))
+        jsonified = jsonify(result="Your ratings: " + str(parsed_movie_ratings) + "\n\n" +
+                	"Predictions: " + predictions_string)
+        print("Going to return: " + str(jsonified))
+        return jsonified
     except Error as e:
         print(e)
 

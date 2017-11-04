@@ -46,11 +46,11 @@ def test_reply():
         movie_rating_string = request.args.get('value', "DEFAULT VALUE", type=str)
         # movie_rating_string is of form "movie1+rating1+movie2+rating2+".
         # Convert to dict.
-        parsed_movie_ratings = dict(toolz.itertoolz.partition(2, movie_rating_string.split("+")))
-        predictions_string = str(make_predictions(parsed_movie_ratings)) 
-        return jsonify("String received: " + movie_rating_string + "\n" + 
-			"Your ratings: " + str(parsed_movie_ratings) + "\n" +
-                	"Predictions: " + predictions_string)
+        #parsed_movie_ratings = dict(toolz.itertoolz.partition(2, movie_rating_string.split("+")))
+        #predictions_string = str(make_predictions(parsed_movie_ratings)) 
+        return jsonify("String received: " + movie_rating_string + "\n" + "")
+			#"Your ratings: " + str(parsed_movie_ratings) + "\n" +
+                	#"Predictions: " + predictions_string)
     except Error as e:
         print(e)
 

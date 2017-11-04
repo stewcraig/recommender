@@ -44,7 +44,7 @@ def static_page():
 def test_reply():
     try:
         movie_rating_string = request.args.get('value', "DEFAULT VALUE", type=str)
-	print("Got: " + movie_rating_string)
+        print("Got: " + movie_rating_string)
         # movie_rating_string is of form "movie1+rating1+movie2+rating2+".
         # Convert to dict.
         #parsed_movie_ratings = dict(toolz.itertoolz.partition(2, movie_rating_string.split("+")))

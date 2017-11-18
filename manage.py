@@ -58,5 +58,16 @@ def test_reply():
     except Error as e:
         print(e)
 
+@app.route('/movies/', methods=['GET'])
+def autocomplete():
+    try:
+        # Temporary function for autocomplete get request (to be updated to access array from database)
+        test_array = ["ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++", "Clojure","COBOL","ColdFusion", "Fortran", "Groovy", "Haskell", "Java", "Erlang", "JavaScript", "Lisp", "Perl", "PHP", "Python", "Ruby", "Scala", "Scheme"]
+        auto_comp_string = request.args.get('search', 'DEFAULT VALUE', type=str)
+        print('Got:' + str(auto_comp_string))
+        return jsonify(test_array)
+    except Error as e:
+        print(e)
+
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=True)

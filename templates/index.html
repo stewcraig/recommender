@@ -7,7 +7,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
 <meta http-equiv="content-type" name="viewport" content="width=device-width, initial-scale=1.0">
-<TITLE>Recommender a classic</TITLE>
+<TITLE>Recommend a classic</TITLE>
 
 <SCRIPT type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
@@ -38,12 +38,13 @@
       "Scheme"
     ];
 
+    // FORM SUBMISSION
     $( "#searchForm" ).submit(function(){
-      // Use loop to conver inputs from entry boxes into a single line
+      // Use loop to convert inputs from entry boxes into a single line
       let searchValue = ""
       for (let i = 1; i < 4; i++){
         var movieName = $("#movie" + i).val();
-        if (movieName) {searchValue += movieName + "+" + $("#rating" + i + " option:selected").val() + "+"};
+        if (movieName) { searchValue += movieName + "+" + $("#rating" + i + " option:selected").val() + "+"} ;
       }
 
       // Ajax request
@@ -51,17 +52,21 @@
         type: "GET",
         url: $SCRIPT_ROOT + "/search/",
         contentType:"application/json; charset=utf-8",
-        data: { value: searchValue},
+        data: { value: searchValue },
         success: function(data){ 
           $("#outputDiv").text(data.result);
-          console.log(data.result)
           }
       });
       return false;
     });
 
+    // AUTOCOMPLETE
     $( ".movie-form" ).autocomplete({
-      source: tags
+      source: function(req, res){
+        $.getJSON($SCRIPT_ROOT + "/movies/", { search: req.term }, function(data){
+          res(data)
+        });
+      }
     });
   });
 </SCRIPT>

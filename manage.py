@@ -18,6 +18,7 @@ try:
   # Form a dataframe of movie information.
   movies_all_df = pd.read_sql("""SELECT * from movies""", conn)
   movies_df = movies_all_df.loc[:, ["movieid", "movierow", "title", "year"]]
+  movie_titles = movies_all_df.title.tolist()
   factorised_movies = movies_all_df.loc[:, ["latent1", "latent2", "latent3", "latent4", "latent5"]]
   # Something wrong with diag table, so just hard-coding for now.
   # factorised_diag = pd.read_sql("""SELECT * from diag""", conn)
@@ -32,6 +33,8 @@ try:
 except KeyError:
   # Probably couldn't access the database. Create a 'recommender' that always reports failure.
   make_predictions = lambda x: "Could not access database."
+  # Create an empty list of movie titles for autocompletion.
+  movie_titles = []
   
 # Set up app.
 app = Flask(__name__)
@@ -61,11 +64,9 @@ def test_reply():
 @app.route('/movies/', methods=['GET'])
 def autocomplete():
     try:
-        # Temporary function for autocomplete get request (to be updated to access array from database)
-        test_array = ["ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++", "Clojure","COBOL","ColdFusion", "Fortran", "Groovy", "Haskell", "Java", "Erlang", "JavaScript", "Lisp", "Perl", "PHP", "Python", "Ruby", "Scala", "Scheme"]
         auto_comp_string = request.args.get('search', 'DEFAULT VALUE', type=str)
         print('Got:' + str(auto_comp_string))
-        return jsonify(test_array)
+        return jsonify(movie_titles)
     except Error as e:
         print(e)
 

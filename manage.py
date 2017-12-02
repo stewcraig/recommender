@@ -19,8 +19,6 @@ try:
   movies_all_df = pd.read_sql("""SELECT * from movies""", conn)
   movies_df = movies_all_df.loc[:, ["movieid", "movierow", "title", "year"]]
   movie_titles = movies_all_df.title.tolist()
-  print("Movie titles: ")
-  print(movie_titles[0:4])
   factorised_movies = movies_all_df.loc[:, ["latent1", "latent2", "latent3", "latent4", "latent5"]]
   # Something wrong with diag table, so just hard-coding for now.
   # factorised_diag = pd.read_sql("""SELECT * from diag""", conn)
@@ -68,6 +66,8 @@ def autocomplete():
     try:
         auto_comp_string = request.args.get('search', 'DEFAULT VALUE', type=str)
         print('Got:' + str(auto_comp_string))
+        print("Movie titles: ")
+        print(movie_titles[0:4])
         matching_movie_titles = [x for x in movie_titles if auto_comp_string in x]
         return jsonify(matching_movie_titles)
     except Error as e:

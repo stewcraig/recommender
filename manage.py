@@ -70,7 +70,12 @@ def autocomplete():
         print(movie_titles[0:4])
         print("Type of movie titles:")
         print(type(movie_titles))
-        matching_movie_titles = [x for x in movie_titles if auto_comp_string in x]
+        matching_movie_titles = []
+        for x in movie_titles:
+            print(x)
+            if auto_comp_string in x:
+                matching_movie_titles.append(x)
+        #matching_movie_titles = [x for x in movie_titles if auto_comp_string in x]
         return jsonify(matching_movie_titles)
     except Error as e:
         print(e)

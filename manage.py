@@ -66,7 +66,7 @@ def autocomplete():
     try:
         auto_comp_string = request.args.get('search', 'DEFAULT VALUE', type=str)
         print('Got:' + str(auto_comp_string))
-        matching_movie_titles = [x for x in movie_titles if (not x is None) and (auto_comp_string in x)]
+        matching_movie_titles = [x for x in movie_titles if (not x is None) and (auto_comp_string.lower() in x.lower())]
         return jsonify(matching_movie_titles)
     except Error as e:
         print(e)

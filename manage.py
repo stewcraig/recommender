@@ -19,6 +19,8 @@ try:
   movies_all_df = pd.read_sql("""SELECT * from movies""", conn)
   movies_df = movies_all_df.loc[:, ["movieid", "movierow", "title", "year"]]
   movie_titles = movies_all_df.title.tolist()
+  print("Movie titles: ")
+  print(movie_titles[0:4])
   factorised_movies = movies_all_df.loc[:, ["latent1", "latent2", "latent3", "latent4", "latent5"]]
   # Something wrong with diag table, so just hard-coding for now.
   # factorised_diag = pd.read_sql("""SELECT * from diag""", conn)

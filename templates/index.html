@@ -12,40 +12,26 @@
 <SCRIPT type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
   $(document).ready(function(){
-
-    //Temporary tags for testing autocomplete
-    var tags = ["ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C",
-      "C++",
-      "Clojure",
-      "COBOL",
-      "ColdFusion",
-      "Erlang",
-      "Fortran",
-      "Groovy",
-      "Haskell",
-      "Java",
-      "JavaScript",
-      "Lisp",
-      "Perl",
-      "PHP",
-      "Python",
-      "Ruby",
-      "Scala",
-      "Scheme"
-    ];
-
+    
+    // Set preliminary year range dates
+    $( "#minYear" ).attr({ "value":1960, "max":(new Date()).getFullYear() });
+    $( "#maxYear" ).attr({ "value":(new Date()).getFullYear(), "max":(new Date()).getFullYear() } );
+    
     // FORM SUBMISSION
     $( "#searchForm" ).submit(function(){
+
       // Use loop to convert inputs from entry boxes into a single line
-      let searchValue = ""
+      var searchValue = ""
       for (let i = 1; i < 4; i++){
         var movieName = $("#movie" + i).val();
         if (movieName) { searchValue += movieName + "+" + $("#rating" + i + " option:selected").val() + "+"} ;
       }
+
+      // Add date range to search value
+      var minDate = $( "#minYear" ).val();
+      var maxDate = $( "#maxYear" ).val();
+      var searchValue= searchValue + "minYear" + Math.min(minDate,maxDate) + "+maxYear" + Math.max(minDate,maxDate);
+      console.log(searchValue);
 
       // Ajax request
       $.ajax({
@@ -101,14 +87,21 @@ p{
   font-weight: 700;
 }
 
+.emdash{
+  padding-top: 5px;
+}
+
 input, select{
   margin-bottom: 10px;
+}
+
+input[type="submit"]{
+  width:auto;
 }
 
 h1{
   letter-spacing: 0px;
   font-weight: 700;
-  /* font-size: 8vw; */
 }
 
 @media (max-width: 576px){
@@ -179,7 +172,13 @@ h1{
                 <OPTION>5</OPTION>
               </SELECT>
            </DIV>
-          <INPUT type="submit" value="Submit"class="btn btn-primary center">
+           <P>Year range</P>
+           <DIV class="row">
+             <INPUT id="minYear" type="number" min="1960" max="2017" step="1" class="form-control col-3" value="1960" required>
+             <P class="col-1 emdash"> &mdash; </P>
+             <INPUT id="maxYear" type="number" min="1960" max="2017" step="1" class="form-control col-3" value="2017" required>
+             <INPUT type="submit" value="Submit" class="btn btn-primary col-3 offset-1">
+           </DIV>
         </FORM>
       </DIV>
       <DIV id="outputDiv" class="center">

@@ -30,7 +30,7 @@
       // Add date range to search value
       var minDate = $( "#minYear" ).val();
       var maxDate = $( "#maxYear" ).val();
-      var searchValue= searchValue + "minYear" + Math.min(minDate,maxDate) + "+maxYear" + Math.max(minDate,maxDate);
+      var searchValue= searchValue + "minYear+" + Math.min(minDate,maxDate) + "+maxYear+" + Math.max(minDate,maxDate);
       console.log(searchValue);
 
       // Ajax request
